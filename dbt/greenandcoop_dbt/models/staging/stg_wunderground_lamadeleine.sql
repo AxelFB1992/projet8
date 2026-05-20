@@ -1,0 +1,24 @@
+with source as (
+    select * from {{ source('raw', 'WeatherUnderground_LaMadeleine_FR_File') }}
+),
+
+renamed as (
+    select
+        'ILAMAD25'                              as station_id,
+        NULLIF("Time", '')                      as measured_at,
+        NULLIF("Temperature", '')               as temperature_raw,
+        NULLIF("Humidity", '')                  as humidity_raw,
+        NULLIF("Pressure", '')                  as pressure_raw,
+        NULLIF("Dew_Point", '')                 as dew_point_raw,
+        "Wind"                                  as wind_direction,
+        NULLIF("Speed", '')                     as wind_speed_raw,
+        NULLIF("Gust", '')                      as wind_gust_raw,
+        NULLIF("Solar", '')                     as solar_radiation_raw,
+        "UV"                                    as uv_index_raw,
+        NULLIF("Precip__Rate_", '')             as precip_rate_raw,
+        NULLIF("Precip__Accum_", '')            as precip_accum_raw
+    from source
+    where NULLIF("Time", '') is not null
+)
+
+select * from renamed

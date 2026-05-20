@@ -1,0 +1,13 @@
+version: 2
+
+sources:
+  - name: raw
+    database: greenandcoop
+    schema: raw
+    tables:
+      - name: InfoClimat_Stations_Hauts_de_France_File
+        description: "Données météo horaires des 4 stations InfoClimat des Hauts-de-France"
+      - name: WeatherUnderground_LaMadeleine_FR_File
+        description: "Données météo de la station amateur Weather Underground de La Madeleine"
+      - name: WeatherUnderground_Ichtegem_BE_File
+        description: "Données météo de la station amateur Weather Underground d'Ichtegem"
