@@ -1,0 +1,109 @@
+version: 2
+
+models:
+  - name: dim_weather_stations
+    description: "Table de dimension des stations météorologiques (InfoClimat et Weather Underground)"
+    columns:
+      - name: station_id
+        description: "Identifiant unique de la station"
+        data_tests:
+          - unique
+          - not_null
+      - name: station_name
+        description: "Nom de la station"
+        data_tests:
+          - not_null
+      - name: network
+        description: "Réseau d'appartenance de la station"
+        data_tests:
+          - not_null
+          - accepted_values:
+                arguments:
+                    values: ['infoclimat', 'weather_underground']
+      - name: latitude
+        description: "Latitude de la station"
+        data_tests:
+          - not_null
+      - name: longitude
+        description: "Longitude de la station"
+        data_tests:
+          - not_null
+      - name: country
+        description: "Pays de la station"
+        data_tests:
+          - accepted_values:
+                arguments:
+                    values: ['France', 'Belgique']
+
+  - name: dim_date
+    description: "Table de dimension temporelle - une ligne par heure sur la période d'analyse"
+    columns:
+      - name: date_id
+        description: "Identifiant unique de la date (format YYYYMMDDHH24)"
+        data_tests:
+          - unique
+          - not_null
+      - name: datetime
+        description: "Date et heure complètes"
+        data_tests:
+          - not_null
+      - name: is_weekend
+        description: "Indicateur jour de week-end"
+        data_tests:
+          - not_null
+
+  - name: fact_weather_measures
+    description: "Table de faits contenant tous les relevés météo de toutes les stations"
+    columns:
+      - name: measure_id
+        description: "Identifiant unique du relevé"
+        data_tests:
+          - not_null
+      - name: station_id
+        description: "Identifiant de la station - clé étrangère vers dim_weather_stations"
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('dim_weather_stations')
+              field: station_id
+      - name: measured_at
+        description: "Timestamp du relevé"
+        data_tests:
+          - not_null
+      - name: source
+        description: "Source des données"
+        data_tests:
+          - not_null
+          - accepted_values:
+                arguments:
+                    values: ['infoclimat', 'weather_underground']
+      - name: temperature_c
+        description: "Température en degrés Celsius (converti depuis °F pour Weather Underground)"
+      - name: humidity_pct
+        description: "Humidité relative en pourcentage (0-100%)"
+      - name: pressure_hpa
+        description: "Pression atmosphérique en hectopascals (converti depuis pouces de mercure pour Weather Underground)"
+      - name: dew_point_c
+        description: "Point de rosée en degrés Celsius (converti depuis °F pour Weather Underground)"
+      - name: wind_direction
+        description: "Direction du vent (ex: NNW, SSE) pour Weather Underground, degrés pour InfoClimat"
+      - name: wind_speed_kmh
+        description: "Vitesse du vent en km/h (converti depuis mph pour Weather Underground)"
+      - name: wind_gust_kmh
+        description: "Vitesse des rafales en km/h (converti depuis mph pour Weather Underground)"
+      - name: visibility_m
+        description: "Visibilité horizontale en mètres (InfoClimat uniquement)"
+      - name: precip_rate_mm
+        description: "Taux de précipitations en mm (converti depuis pouces pour Weather Underground)"
+      - name: precip_accum_mm
+        description: "Précipitations accumulées en mm (converti depuis pouces pour Weather Underground)"
+      - name: snow_depth_cm
+        description: "Épaisseur de neige au sol en cm (InfoClimat uniquement)"
+      - name: cloud_cover_oktas
+        description: "Nébulosité en octas 0-8 (InfoClimat uniquement)"
+      - name: weather_code
+        description: "Code météo OMM (InfoClimat uniquement)"
+      - name: solar_radiation
+        description: "Rayonnement solaire en W/m² (Weather Underground uniquement)"
+      - name: uv_index
+        description: "Indice UV (Weather Underground uniquement)"
