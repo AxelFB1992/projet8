@@ -1,3 +1,18 @@
+{{ config(
+    materialized='table',
+    indexes=[
+        {'columns': ['station_id'], 'type': 'btree'},
+        {'columns': ['measured_at'], 'type': 'btree'},
+        {'columns': ['source'], 'type': 'btree'},
+        {'columns': ['station_id', 'measured_at'], 'type': 'btree'}
+    ],
+	post_hook=[
+	    "ALTER TABLE {{ this }} DROP CONSTRAINT IF EXISTS pk_fact_weather_measures",
+	    "ALTER TABLE {{ this }} DROP CONSTRAINT IF EXISTS fk_fact_station",
+	    "ALTER TABLE {{ this }} ADD CONSTRAINT fk_fact_station FOREIGN KEY (station_id) REFERENCES public_marts.dim_weather_stations(station_id)"
+	]) 
+	}}
+
 with unified as (
     select * from {{ ref('int_weather_unified') }}
 ),
@@ -9,8 +24,7 @@ dim_stations as (
 final as (
     select
         -- Clés
-        {{ dbt_utils.generate_surrogate_key(['u.station_id', 'u.measured_at']) }}   as measure_id,
-        u.station_id,
+		{{ dbt_utils.generate_surrogate_key(['u.station_id', 'u.measured_at', 'u.source']) }} as measure_id,        u.station_id,
         u.measured_at,
         u.source,
         -- Mesures météo

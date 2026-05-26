@@ -1,3 +1,15 @@
+{{ config(
+    materialized='table',
+    indexes=[
+        {'columns': ['station_id'], 'unique': true, 'type': 'btree'},
+        {'columns': ['network'], 'type': 'btree'}
+    ],
+    post_hook=[
+        "ALTER TABLE {{ this }} DROP CONSTRAINT IF EXISTS pk_dim_weather_stations",
+        "ALTER TABLE {{ this }} ADD CONSTRAINT pk_dim_weather_stations PRIMARY KEY (station_id)"
+    ]
+) }}
+
 with infoclimat_stations as (
     select
         '00052'             as station_id,

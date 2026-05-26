@@ -1,3 +1,16 @@
+{{ config(
+    materialized='table',
+    indexes=[
+        {'columns': ['date_id'], 'unique': true, 'type': 'btree'},
+        {'columns': ['date'], 'type': 'btree'},
+        {'columns': ['year', 'month'], 'type': 'btree'}
+    ],
+    post_hook=[
+    	"ALTER TABLE {{ this }} DROP CONSTRAINT IF EXISTS pk_dim_date",
+    	"ALTER TABLE {{ this }} ADD CONSTRAINT pk_dim_date PRIMARY KEY (date_id)"
+    ]
+) }}
+
 with date_spine as (
     select
         generate_series(
