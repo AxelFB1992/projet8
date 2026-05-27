@@ -16,8 +16,8 @@ expanded as (
 renamed as (
     select
         record->>'id_station'                   as station_id,
-        record->>'dh_utc'                       as measured_at,
-        record->>'temperature'                  as temperature_raw,
+		(record->>'dh_utc')::timestamp    		as measured_at,       
+		record->>'temperature'                  as temperature_raw,
         record->>'humidite'                     as humidity_raw,
         record->>'pression'                     as pressure_raw,
         record->>'point_de_rosee'               as dew_point_raw,

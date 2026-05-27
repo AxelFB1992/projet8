@@ -5,8 +5,10 @@
         {'columns': ['date'], 'type': 'btree'},
         {'columns': ['year', 'month'], 'type': 'btree'}
     ],
+    pre_hook=[
+        "ALTER TABLE IF EXISTS {{ this }} DROP CONSTRAINT IF EXISTS pk_dim_date"
+        ],
     post_hook=[
-    	"ALTER TABLE {{ this }} DROP CONSTRAINT IF EXISTS pk_dim_date",
     	"ALTER TABLE {{ this }} ADD CONSTRAINT pk_dim_date PRIMARY KEY (date_id)"
     ]
 ) }}

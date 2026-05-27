@@ -6,11 +6,14 @@
         {'columns': ['source'], 'type': 'btree'},
         {'columns': ['station_id', 'measured_at'], 'type': 'btree'}
     ],
+    pre_hook=[
+        "ALTER TABLE IF EXISTS {{ this }} DROP CONSTRAINT IF EXISTS pk_fact_weather_measures",
+        "ALTER TABLE IF EXISTS {{ this }} DROP CONSTRAINT IF EXISTS fk_fact_station"
+        ],
 	post_hook=[
-	    "ALTER TABLE {{ this }} DROP CONSTRAINT IF EXISTS pk_fact_weather_measures",
-	    "ALTER TABLE {{ this }} DROP CONSTRAINT IF EXISTS fk_fact_station",
+	    "ALTER TABLE {{ this }} ADD CONSTRAINT pk_fact_weather_measures PRIMARY KEY (measure_id)",
 	    "ALTER TABLE {{ this }} ADD CONSTRAINT fk_fact_station FOREIGN KEY (station_id) REFERENCES public_marts.dim_weather_stations(station_id)"
-	]) 
+	])
 	}}
 
 with unified as (
@@ -24,7 +27,8 @@ dim_stations as (
 final as (
     select
         -- Clés
-		{{ dbt_utils.generate_surrogate_key(['u.station_id', 'u.measured_at', 'u.source']) }} as measure_id,        u.station_id,
+		{{ dbt_utils.generate_surrogate_key(['u.station_id', 'u.measured_at']) }} as measure_id,
+		u.station_id,
         u.measured_at,
         u.source,
         -- Mesures météo

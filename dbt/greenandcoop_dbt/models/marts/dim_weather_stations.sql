@@ -4,8 +4,11 @@
         {'columns': ['station_id'], 'unique': true, 'type': 'btree'},
         {'columns': ['network'], 'type': 'btree'}
     ],
+    pre_hook=[
+        "ALTER TABLE IF EXISTS {{ this }} DROP CONSTRAINT IF EXISTS pk_dim_weather_stations"
+        ],
     post_hook=[
-        "ALTER TABLE {{ this }} DROP CONSTRAINT IF EXISTS pk_dim_weather_stations",
+        
         "ALTER TABLE {{ this }} ADD CONSTRAINT pk_dim_weather_stations PRIMARY KEY (station_id)"
     ]
 ) }}
