@@ -1,0 +1,48 @@
+version: 2
+
+models:
+  - name: stg_infoclimat
+    description: "Données météo brutes InfoClimat nettoyées et standardisées"
+    columns:
+      - name: station_id
+        description: "Identifiant de la station InfoClimat"
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ['07015', '00052', '000R5', 'STATIC0010']
+      - name: measured_at
+        description: "Timestamp du relevé"
+        data_tests:
+          - not_null
+      - name: temperature_raw
+        description: "Température brute en °C"
+      - name: humidity_raw
+        description: "Humidité brute en %"
+
+  - name: stg_wunderground_lamadeleine
+    description: "Données météo brutes Weather Underground La Madeleine nettoyées"
+    columns:
+      - name: station_id
+        description: "Identifiant de la station"
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ['ILAMAD25']
+      - name: measured_at
+        description: "Timestamp du relevé"
+        data_tests:
+          - not_null
+
+  - name: stg_wunderground_ichtegem
+    description: "Données météo brutes Weather Underground Ichtegem nettoyées"
+    columns:
+      - name: station_id
+        description: "Identifiant de la station"
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ['IICHTE19']
+      - name: measured_at
+        description: "Timestamp du relevé"
+        data_tests:
+          - not_null

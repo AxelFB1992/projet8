@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: int_weather_unified
+    description: "Données météo unifiées de toutes les sources"
+    columns:
+      - name: station_id
+        description: "Identifiant de la station"
+        data_tests:
+          - not_null
+      - name: measured_at
+        description: "Timestamp du relevé"
+        data_tests:
+          - not_null
+      - name: source
+        description: "Source des données"
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: ['infoclimat', 'weather_underground']
