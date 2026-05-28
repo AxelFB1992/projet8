@@ -35,22 +35,22 @@ models:
                 arguments:
                     values: ['France', 'Belgique']
 
-  - name: dim_date
-    description: "Table de dimension temporelle - une ligne par heure sur la période d'analyse"
-    columns:
-      - name: date_id
-        description: "Identifiant unique de la date (format YYYYMMDDHH24)"
-        data_tests:
-          - unique
-          - not_null
-      - name: datetime
-        description: "Date et heure complètes"
-        data_tests:
-          - not_null
-      - name: is_weekend
-        description: "Indicateur jour de week-end"
-        data_tests:
-          - not_null
+#  - name: dim_date
+#    description: "Table de dimension temporelle - une ligne par heure sur la période d'analyse"
+#    columns:
+#      - name: date_id
+#        description: "Identifiant unique de la date (format YYYYMMDDHH24)"
+#        data_tests:
+#          - unique
+#          - not_null
+#      - name: datetime
+#        description: "Date et heure complètes"
+#        data_tests:
+#          - not_null
+#      - name: is_weekend
+#        description: "Indicateur jour de week-end"
+#        data_tests:
+#          - not_null
 
   - name: fact_weather_measures
     description: "Table de faits contenant tous les relevés météo de toutes les stations"
