@@ -222,3 +222,4 @@ __marimo__/
 docker/.env
 
 airbyte/*.pem
+aws/
