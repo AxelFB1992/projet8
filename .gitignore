@@ -220,3 +220,5 @@ __marimo__/
 
 #env
 docker/.env
+
+airbyte/*.pem
