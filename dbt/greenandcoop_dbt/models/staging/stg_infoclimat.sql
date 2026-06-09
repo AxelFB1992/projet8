@@ -28,7 +28,7 @@ renamed as (
         record->>'pluie_1h'                     as precip_rate_raw,
         record->>'pluie_3h'                     as precip_accum_raw,
         record->>'neige_au_sol'                 as snow_depth_raw,
-        NULLIF(record->>'nebulosite', '')        as cloud_cover_raw,
+        NULLIF(record->>'nebulosite', '')       as cloud_cover_raw,
         record->>'temps_omm'                    as weather_code
     from expanded
     where record->>'id_station' is not null
